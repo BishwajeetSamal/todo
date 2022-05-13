@@ -128,37 +128,28 @@ public class UserServiceImpl implements UserService {
 
     public RestResponse userLogin(LoginDto loginDto) throws HandleUserException {
         Users u = null;
-        if (loginDto.getEmailId() == null && loginDto.getUserName() == null) {
-            throw new HandleUserException("Please Enter Relevant Details !");
+        if (loginDto.getuserName() == null) {
+            throw new HandleUserException("Please Enter Details !");
         } else {
-            if (loginDto.getEmailId() != null) {
-                u = userRepository.findByEmailIdIgnoreCase(loginDto.getEmailId());
+            u = userRepository.findByEmailIdIgnoreCase(loginDto.getuserName());
+            if (u == null) {
+                u = userRepository.findByUserName(loginDto.getuserName());
                 if (u == null) {
                     throw new HandleUserException("Invalid Creadentials");
-                } else if (bCryptPasswordEncoder.matches(loginDto.getUserPassword(), u.getPassword())) {
-                    String t = saveToken(u);
-                    LoginResponseDto loginResp = new LoginResponseDto();
-                    loginResp.setUserName(u.getUserName());
-                    loginResp.setOrganisation(u.getOrganisation());
-                    loginResp.setToken(t);
-
-                    return new StatusResponse(200, "User Login Successfully !", loginResp);
-                } else {
-                    return new StatusResponse(401, "Invalid Credentials !", null);
                 }
-
             }
 
-            if (loginDto.getUserName() != null) {
-                u = userRepository.findByUserName(loginDto.getUserName());
-                if (u == null) {
-                    throw new HandleUserException("Enter Correct UserName and password");
-                } else {
-                    saveToken(u);
-                    return new StatusResponse(202, "User Login Successfully !", u);
-                }
+            if (u != null && bCryptPasswordEncoder.matches(loginDto.getUserPassword(), u.getPassword())) {
+                String t = saveToken(u);
+                LoginResponseDto loginResp = new LoginResponseDto();
+                loginResp.setUserName(u.getUserName());
+                loginResp.setOrganisation(u.getOrganisation());
+                loginResp.setToken(t);
+
+                return new StatusResponse(200, "User Login Successfully !", loginResp);
+            } else {
+                return new StatusResponse(401, "Invalid Credentials !", null);
             }
         }
-        return new StatusResponse(505, "Server Error !", null);
     }
 }

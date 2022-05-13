@@ -1,46 +1,37 @@
 package com.demo.todo.dto;
 
 public class LoginDto {
-    private String UserName;
-    private String emailId;
-    private String userPassword;
 
-    public LoginDto(String userName, String emailId, String userPassword) {
-        UserName = userName;
-        this.emailId = emailId;
-        this.userPassword = userPassword;
-    }
+	private String userName;
+	private String userPassword;
 
-    public LoginDto() {
-    }
+	public LoginDto(String userName, String userPassword) {
+		this.userName = userName;
+		this.userPassword = userPassword;
+	}
 
-    public String getUserName() {
-        return UserName;
-    }
+	public LoginDto() {
+	}
 
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
+	public String getuserName() {
+		return userName;
+	}
 
-    public String getEmailId() {
-        return emailId;
-    }
+	public void setuserName(String userName) {
+		this.userName = userName;
+	}
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
+	public String getUserPassword() {
+		return userPassword;
+	}
 
-    public String getUserPassword() {
-        return userPassword;
-    }
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    @Override
-    public String toString() {
-        return "LoginDto [UserName=" + UserName + ", emailId=" + emailId + ", userPassword=" + userPassword + "]";
-    }
+	@Override
+	public String toString() {
+		return "LoginDto [userName=" + userName + ", userPassword=" + userPassword + "]";
+	}
 
 }
