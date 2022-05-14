@@ -128,12 +128,24 @@ public class UserServiceImpl implements UserService {
 
     public RestResponse userLogin(LoginDto loginDto) throws HandleUserException {
         Users u = null;
-        if (loginDto.getuserName() == null) {
+        RestResponse rs = null;
+        // list of required parameter in this registration and can be change
+        String[] requestedArray = { "userName",
+                "password" };
+        Validations validations = new Validations();
+        // validate user with required fields
+        rs = validations.validate(loginDto, requestedArray);
+        if (rs != null) {
+            StatusResponse ds = (StatusResponse) rs;
+            logger.error("Login validation Error " + ds.getMessage());
+            return new StatusResponse(400, ds.getMessage(), null);
+        }
+        if (loginDto.getUserName() == null) {
             throw new HandleUserException("Please Enter Details !");
         } else {
-            u = userRepository.findByEmailIdIgnoreCase(loginDto.getuserName());
+            u = userRepository.findByEmailIdIgnoreCase(loginDto.getUserName());
             if (u == null) {
-                u = userRepository.findByUserName(loginDto.getuserName());
+                u = userRepository.findByUserName(loginDto.getUserName());
                 if (u == null) {
                     throw new HandleUserException("Invalid Creadentials");
                 }

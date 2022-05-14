@@ -1,11 +1,16 @@
 package com.demo.todo.dto;
 
-public class LoginDto {
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+public class LoginDto {
+	@NotNull(message = "User Name required")
+    @NotEmpty(message = "User Name required")
 	private String userName;
 	private String userPassword;
-
-	public LoginDto(String userName, String userPassword) {
+	
+	public LoginDto(@NotNull(message = "User Name required") @NotEmpty(message = "User Name required") String userName,
+			String userPassword) {
 		this.userName = userName;
 		this.userPassword = userPassword;
 	}
@@ -13,11 +18,11 @@ public class LoginDto {
 	public LoginDto() {
 	}
 
-	public String getuserName() {
+	public String getUserName() {
 		return userName;
 	}
 
-	public void setuserName(String userName) {
+	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 
@@ -33,5 +38,7 @@ public class LoginDto {
 	public String toString() {
 		return "LoginDto [userName=" + userName + ", userPassword=" + userPassword + "]";
 	}
+
+	
 
 }
