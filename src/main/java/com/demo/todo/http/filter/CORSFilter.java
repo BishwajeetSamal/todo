@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
@@ -35,7 +36,6 @@ public class CORSFilter implements Filter {
     try {
       HttpServletRequest httpRequest = (HttpServletRequest) req;
       if (httpRequest.getHeader("Authorization") == null) {
-        System.out.println("Id------------->philal null hai koi token nahi ayi hai");
         chain.doFilter(req, res);
       } else {
 
