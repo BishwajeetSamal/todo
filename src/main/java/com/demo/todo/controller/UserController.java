@@ -59,10 +59,7 @@ public class UserController {
     //logout code
     @PostMapping(value = "/logout", produces = "application/json")
 	public RestResponse logout(HttpServletRequest req) {
-        System.out.println("Token==========>>>>>>"+req.getHeader("token"));
         Token tokenObj =  tokenRespository.findByUserToken(req.getHeader("token"));
-            System.out.println("token");
-            System.out.println(tokenObj);
              tokenRespository.delete(tokenObj);
              
            return new StatusResponse(200,"Logout Successful",null);
