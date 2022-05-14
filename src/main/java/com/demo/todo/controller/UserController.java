@@ -1,9 +1,13 @@
 package com.demo.todo.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.demo.todo.dto.LoginDto;
 import com.demo.todo.dto.RegisterDto;
 import com.demo.todo.dto.http.response.RestResponse;
 import com.demo.todo.dto.http.response.StatusResponse;
+import com.demo.todo.model.users.Token;
+import com.demo.todo.repository.TokenRepository;
 import com.demo.todo.service.UserService;
 import com.demo.todo.util.AlreadyExistException;
 import com.demo.todo.util.HandleUserException;
@@ -21,6 +25,9 @@ import ch.qos.logback.classic.Logger;
 public class UserController {
     @Autowired
     UserService userService;
+    
+    @Autowired
+    TokenRepository tokenRespository;
     private static final Logger logger = (Logger) LoggerFactory.getLogger(UserController.class);
 
     @PostMapping(value = "/register", produces = "application/json")
@@ -37,6 +44,7 @@ public class UserController {
 
     }
 
+    //login code
     @PostMapping(value = "/login", produces = "application/json")
     public RestResponse userLogin(@RequestBody LoginDto loginDto) {
         try {
@@ -47,5 +55,17 @@ public class UserController {
             return new StatusResponse(500, e.getMessage(), null);
         }
     }
+
+    //logout code
+    @PostMapping(value = "/logout", produces = "application/json")
+	public RestResponse logout(HttpServletRequest req) {
+        System.out.println("Token==========>>>>>>"+req.getHeader("token"));
+        Token tokenObj =  tokenRespository.findByUserToken(req.getHeader("token"));
+            System.out.println("token");
+            System.out.println(tokenObj);
+             tokenRespository.delete(tokenObj);
+             
+           return new StatusResponse(200,"Logout Successful",null);
+	}
 
 }

@@ -1,5 +1,7 @@
 package com.demo.todo.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.demo.todo.dto.LoginDto;
 import com.demo.todo.dto.RegisterDto;
 import com.demo.todo.dto.http.response.RestResponse;
@@ -10,5 +12,6 @@ public interface UserService {
     public RestResponse register(RegisterDto registerDto) throws AlreadyExistException;
 
     public RestResponse userLogin(LoginDto loginDto) throws HandleUserException;
+    
 
 }
