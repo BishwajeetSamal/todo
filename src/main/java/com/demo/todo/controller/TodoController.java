@@ -28,11 +28,12 @@ public class TodoController {
 	@Autowired
 	private TodoService todoService;
 
-	@GetMapping("alltasks/showall")
-	public RestResponse getAllTasks(HttpServletRequest req) {
-		long userId=Long.parseLong(req.getAttribute("id").toString());
-			return todoService.fetchAllTasks(userId);
-			
+	@GetMapping("alltasks/showall/{offset}/{pageSize}")
+	public RestResponse getAllTasks(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize,
+			HttpServletRequest req) {
+		long userId = Long.parseLong(req.getAttribute("id").toString());
+		return todoService.fetchAllTasks(offset, pageSize, userId);
+
 	}
 
 	@PostMapping("/alltasks")
