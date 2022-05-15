@@ -2,6 +2,8 @@ package com.demo.todo.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +29,10 @@ public class TodoController {
 	private TodoService todoService;
 
 	@GetMapping("alltasks/showall")
-	public List<TodoTask> getAllTasks() {
-		return taskRepository.findAll();
-
+	public RestResponse getAllTasks(HttpServletRequest req) {
+		long userId=Long.parseLong(req.getAttribute("id").toString());
+			return todoService.fetchAllTasks(userId);
+			
 	}
 
 	@PostMapping("/alltasks")

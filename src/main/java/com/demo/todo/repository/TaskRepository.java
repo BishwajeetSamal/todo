@@ -9,6 +9,7 @@ import com.demo.todo.model.TodoTask;
 @Repository
 public interface TaskRepository extends JpaRepository<TodoTask, Long>{
 	public TodoTask findById(long id);
-	public List<TodoTask> findAll();
+	public List<TodoTask> findByUserIdOrderByCreatedAtDesc(long userId);
+	
 	
 }

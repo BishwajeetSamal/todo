@@ -12,12 +12,27 @@ public class TodoTask {
 	@SequenceGenerator(name = "task_generator", sequenceName = "task_sequence", initialValue = 1)
 	private long id;
 	private String taskrow;
-	private int userId;
+	private long userId;
 	private boolean isActive;
 	private String emailId;
 	private long deadLine;
 	private long createdAt = System.currentTimeMillis();
 	private long updateAt = System.currentTimeMillis();
+
+	public TodoTask(long id, String taskrow, long userId, boolean isActive, String emailId, long deadLine,
+			long createdAt, long updateAt) {
+		this.id = id;
+		this.taskrow = taskrow;
+		this.userId = userId;
+		this.isActive = isActive;
+		this.emailId = emailId;
+		this.deadLine = deadLine;
+		this.createdAt = createdAt;
+		this.updateAt = updateAt;
+	}
+
+	public TodoTask() {
+	}
 
 	public long getId() {
 		return id;
@@ -35,11 +50,11 @@ public class TodoTask {
 		this.taskrow = taskrow;
 	}
 
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
@@ -83,29 +98,10 @@ public class TodoTask {
 		this.updateAt = updateAt;
 	}
 
-	public TodoTask(long id, String taskrow, int userId, boolean isActive, String emailId, long deadLine,
-			long createdAt,
-			long updateAt) {
-		super();
-		this.id = id;
-		this.taskrow = taskrow;
-		this.userId = userId;
-		this.isActive = isActive;
-		this.emailId = emailId;
-		this.deadLine = deadLine;
-		this.createdAt = createdAt;
-		this.updateAt = updateAt;
-	}
-
-	public TodoTask() {
-		super();
-	}
-
 	@Override
 	public String toString() {
-		return "TodoTask [id=" + id + ", taskrow=" + taskrow + ", userId=" + userId + ", isActive=" + isActive
-				+ ", emailId=" + emailId + ", deadLine=" + deadLine + ", createdAt=" + createdAt + ", updateAt="
-				+ updateAt
+		return "TodoTask [createdAt=" + createdAt + ", deadLine=" + deadLine + ", emailId=" + emailId + ", id=" + id
+				+ ", isActive=" + isActive + ", taskrow=" + taskrow + ", updateAt=" + updateAt + ", userId=" + userId
 				+ "]";
 	}
 
