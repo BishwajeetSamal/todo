@@ -28,6 +28,13 @@ public class TodoController {
 	@Autowired
 	private TodoService todoService;
 
+	public String RemoveLastEqual(String str) {
+		if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == '=') {
+			str = str.substring(0, str.length() - 1);
+		}
+		return str;
+	}
+
 	@GetMapping("alltasks/showall/{offset}/{pageSize}")
 	public RestResponse getAllTasks(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize,
 			HttpServletRequest req) {
@@ -56,6 +63,16 @@ public class TodoController {
 		} else
 			return null;
 		// return ResponseEntity.ok(updateEmployee);
+
+	}
+
+	
+	@PostMapping("alltasks/searchall/{offset}/{pageSize}")
+	public RestResponse textSearchAll(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize,@RequestBody String text,
+			HttpServletRequest req) {
+				String newStr = RemoveLastEqual(text);
+		long userId = Long.parseLong(req.getAttribute("id").toString());
+		return todoService.fetchTaskByText(offset, pageSize,newStr,userId);
 
 	}
 

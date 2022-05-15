@@ -2,8 +2,6 @@ package com.demo.todo.serviceImpl;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-
 import com.demo.todo.dto.AddTaskDto;
 import com.demo.todo.dto.PaginationAndListDto;
 import com.demo.todo.dto.http.response.RestResponse;
@@ -22,7 +20,6 @@ public class TodoServiceImpl implements TodoService {
 
     @Autowired
     TaskRepository taskRepository;
-
     
 
     public RestResponse addUserTask(AddTaskDto task) {
@@ -47,4 +44,25 @@ public class TodoServiceImpl implements TodoService {
         countAndListData.setCount(i);
         return new StatusResponse(200,"All Data",countAndListData);
     }
+
+    //fetch all tasks by SeachText
+    public RestResponse fetchTaskByText(int offset,int pageSize,String textSearch1,long userId){
+        PaginationAndListDto countAndListData = new PaginationAndListDto();
+    
+        if(textSearch1.equals("**None**")){
+            Page<TodoTask> allTasks = taskRepository.findByUserIdOrderByCreatedAtDesc(PageRequest.of((offset-1),pageSize), userId);
+            countAndListData.setTasks(allTasks);
+        }else{
+            Page<TodoTask> allTasks = taskRepository.findByTaskrowContainingAndUserId(PageRequest.of((offset-1),pageSize),textSearch1, userId);
+            countAndListData.setTasks(allTasks);  
+        }
+       
+        
+        long totalRecordCount = taskRepository.countByUserId(userId); 
+        int i=(int)totalRecordCount;  
+        countAndListData.setCount(i);
+        return new StatusResponse(200,"All Searched data",countAndListData);
+
+    }
+   
 }

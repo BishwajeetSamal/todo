@@ -41,4 +41,11 @@ public class StatusResponse implements RestResponse {
         this.obj = obj;
     }
 
+    
+    @Override
+    public String toString() {
+        return "StatusResponse [message=" + message + ", obj=" + obj + ", status=" + status + "]";
+    }
+
+
 }

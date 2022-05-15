@@ -12,6 +12,7 @@ import com.demo.todo.model.TodoTask;
 public interface TaskRepository extends JpaRepository<TodoTask, Long>{
 	public TodoTask findById(long id);
 	public Page<TodoTask> findByUserIdOrderByCreatedAtDesc(Pageable pageable,long userId);
+	public Page<TodoTask> findByTaskrowContainingAndUserId(Pageable pageable,String text,long userId);
 	public long countByUserId(long userId);
 	
 	
