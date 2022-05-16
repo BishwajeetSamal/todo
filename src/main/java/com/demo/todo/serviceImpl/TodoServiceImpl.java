@@ -2,12 +2,16 @@ package com.demo.todo.serviceImpl;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import com.demo.todo.dto.AddTaskDto;
 import com.demo.todo.dto.PaginationAndListDto;
 import com.demo.todo.dto.http.response.RestResponse;
 import com.demo.todo.dto.http.response.StatusResponse;
 import com.demo.todo.model.TodoTask;
+import com.demo.todo.model.users.Users;
 import com.demo.todo.repository.TaskRepository;
+import com.demo.todo.repository.UserRepository;
 import com.demo.todo.service.TodoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +24,17 @@ public class TodoServiceImpl implements TodoService {
 
     @Autowired
     TaskRepository taskRepository;
+
+    @Autowired
+    UserRepository userRepository;
     
 
-    public RestResponse addUserTask(AddTaskDto task) {
+    public RestResponse addUserTask(AddTaskDto task,long userId) {
         TodoTask compTask = new TodoTask();
-        compTask.setEmailId(task.getEmailId());
+        compTask.setDescription(task.getDescription());
         compTask.setTaskrow(task.getTaskrow());
-        compTask.setUserId(task.getUserId());
+        Users u = userRepository.findById(userId);
+        compTask.setUsers(u);
         LocalDateTime dateTime = task.getUserTime();
         Timestamp timestamp_object = Timestamp.valueOf(dateTime);
         compTask.setDeadLine(timestamp_object.getTime());
@@ -37,9 +45,10 @@ public class TodoServiceImpl implements TodoService {
     public RestResponse fetchAllTasks(int offset,int pageSize,long userId){
 
         PaginationAndListDto countAndListData = new PaginationAndListDto();
-        Page<TodoTask> allTasks = taskRepository.findByUserIdOrderByCreatedAtDesc(PageRequest.of((offset-1),pageSize), userId);
+        Users u = userRepository.findById(userId);
+        List<TodoTask> allTasks = taskRepository.findByUsersOrderByCreatedAtDesc(u,PageRequest.of((offset-1),pageSize));
         countAndListData.setTasks(allTasks);
-        long totalRecordCount = taskRepository.countByUserId(userId); 
+        long totalRecordCount = taskRepository.countByUsers(u); 
         int i=(int)totalRecordCount;  
         countAndListData.setCount(i);
         return new StatusResponse(200,"All Data",countAndListData);
@@ -48,19 +57,27 @@ public class TodoServiceImpl implements TodoService {
     //fetch all tasks by SeachText
     public RestResponse fetchTaskByText(int offset,int pageSize,String textSearch1,long userId){
         PaginationAndListDto countAndListData = new PaginationAndListDto();
-    
-        if(textSearch1.equals("**None**")){
-            Page<TodoTask> allTasks = taskRepository.findByUserIdOrderByCreatedAtDesc(PageRequest.of((offset-1),pageSize), userId);
-            countAndListData.setTasks(allTasks);
-        }else{
-            Page<TodoTask> allTasks = taskRepository.findByTaskrowContainingAndUserId(PageRequest.of((offset-1),pageSize),textSearch1, userId);
+        Users u = userRepository.findById(userId);
+            List<TodoTask> allTasks = taskRepository.findByTaskrowContainingIgnoreCaseAndUsersOrderByCreatedAtDesc(textSearch1, u,PageRequest.of((offset-1),pageSize));
             countAndListData.setTasks(allTasks);  
+           long totalRecordCount ;
+           System.out.println("abxc="+textSearch1);
+        if(textSearch1.isEmpty()){
+            System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+             totalRecordCount = taskRepository.countByUsers(u);
+             System.out.println(totalRecordCount); 
+        }else{
+            System.out.println(textSearch1);
+            totalRecordCount = taskRepository.countByTaskrowContainingIgnoreCaseAndUsers(textSearch1,u); 
         }
-       
         
-        long totalRecordCount = taskRepository.countByUserId(userId); 
-        int i=(int)totalRecordCount;  
+        int i=(int)totalRecordCount;
+        System.out.println(i);  
         countAndListData.setCount(i);
+        System.out.println(textSearch1);
+        System.out.println("Users==================================");
+        System.out.println(countAndListData);
+
         return new StatusResponse(200,"All Searched data",countAndListData);
 
     }

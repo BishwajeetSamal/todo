@@ -11,7 +11,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;

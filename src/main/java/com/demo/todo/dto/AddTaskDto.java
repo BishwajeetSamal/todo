@@ -2,20 +2,28 @@ package com.demo.todo.dto;
 
 import java.time.LocalDateTime;
 
+import com.demo.todo.model.users.Users;
+
 public class AddTaskDto {
 
 	private String taskrow;
-	private long userId;
 	private boolean isActive;
-	private String emailId;
+	private String description;
 	private LocalDateTime userTime;
-	
-	public AddTaskDto(String taskrow, long userId, boolean isActive, String emailId, LocalDateTime userTime) {
+	private long createdAt = System.currentTimeMillis();
+	private long updateAt = System.currentTimeMillis();
+
+	Users users;
+
+	public AddTaskDto(String taskrow, boolean isActive, String description, LocalDateTime userTime, long createdAt,
+			long updateAt, Users users) {
 		this.taskrow = taskrow;
-		this.userId = userId;
 		this.isActive = isActive;
-		this.emailId = emailId;
+		this.description = description;
 		this.userTime = userTime;
+		this.createdAt = createdAt;
+		this.updateAt = updateAt;
+		this.users = users;
 	}
 
 	public AddTaskDto() {
@@ -29,14 +37,6 @@ public class AddTaskDto {
 		this.taskrow = taskrow;
 	}
 
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
 	public boolean isActive() {
 		return isActive;
 	}
@@ -45,12 +45,12 @@ public class AddTaskDto {
 		this.isActive = isActive;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public LocalDateTime getUserTime() {
@@ -61,13 +61,36 @@ public class AddTaskDto {
 		this.userTime = userTime;
 	}
 
-	@Override
-	public String toString() {
-		return "AddTaskDto [emailId=" + emailId + ", isActive=" + isActive + ", taskrow=" + taskrow + ", userId="
-				+ userId + ", userTime=" + userTime + "]";
+	public long getCreatedAt() {
+		return createdAt;
 	}
 
-	
-	
-	
+	public void setCreatedAt(long createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public long getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(long updateAt) {
+		this.updateAt = updateAt;
+	}
+
+	public Users getUsers() {
+		return users;
+	}
+
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+
+	@Override
+	public String toString() {
+		return "AddTaskDto [createdAt=" + createdAt + ", description=" + description + ", isActive=" + isActive
+				+ ", taskrow=" + taskrow + ", updateAt=" + updateAt + ", userTime=" + userTime + ", users=" + users
+				+ "]";
+	}
 }
+
+	

@@ -1,9 +1,14 @@
 package com.demo.todo.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+
+import com.demo.todo.model.users.Users;
+
 
 @Entity
 public class TodoTask {
@@ -12,23 +17,26 @@ public class TodoTask {
 	@SequenceGenerator(name = "task_generator", sequenceName = "task_sequence", initialValue = 1)
 	private long id;
 	private String taskrow;
-	private long userId;
 	private boolean isActive;
-	private String emailId;
+	@Column(columnDefinition="TEXT")
+	private String description;
 	private long deadLine;
 	private long createdAt = System.currentTimeMillis();
 	private long updateAt = System.currentTimeMillis();
+	
+	@ManyToOne
+	Users users;
 
-	public TodoTask(long id, String taskrow, long userId, boolean isActive, String emailId, long deadLine,
-			long createdAt, long updateAt) {
+	public TodoTask(long id, String taskrow, boolean isActive, String description, long deadLine, long createdAt,
+			long updateAt, Users users) {
 		this.id = id;
 		this.taskrow = taskrow;
-		this.userId = userId;
 		this.isActive = isActive;
-		this.emailId = emailId;
+		this.description = description;
 		this.deadLine = deadLine;
 		this.createdAt = createdAt;
 		this.updateAt = updateAt;
+		this.users = users;
 	}
 
 	public TodoTask() {
@@ -50,14 +58,6 @@ public class TodoTask {
 		this.taskrow = taskrow;
 	}
 
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
 	public boolean isActive() {
 		return isActive;
 	}
@@ -66,12 +66,12 @@ public class TodoTask {
 		this.isActive = isActive;
 	}
 
-	public String getEmailId() {
-		return emailId;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public long getDeadLine() {
@@ -98,11 +98,21 @@ public class TodoTask {
 		this.updateAt = updateAt;
 	}
 
-	@Override
-	public String toString() {
-		return "TodoTask [createdAt=" + createdAt + ", deadLine=" + deadLine + ", emailId=" + emailId + ", id=" + id
-				+ ", isActive=" + isActive + ", taskrow=" + taskrow + ", updateAt=" + updateAt + ", userId=" + userId
-				+ "]";
+	public Users getUsers() {
+		return users;
 	}
 
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+
+	@Override
+	public String toString() {
+		return "TodoTask [createdAt=" + createdAt + ", deadLine=" + deadLine + ", description=" + description + ", id="
+				+ id + ", isActive=" + isActive + ", taskrow=" + taskrow + ", updateAt=" + updateAt + ", users=" + users
+				+ "]";
+	}
+	
+	
+	
 }

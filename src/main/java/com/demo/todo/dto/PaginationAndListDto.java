@@ -1,14 +1,15 @@
 package com.demo.todo.dto;
 
+import java.util.List;
+
 import com.demo.todo.model.TodoTask;
 
 import org.springframework.data.domain.Page;
 
 public class PaginationAndListDto {
     private int count;
-    private Page<TodoTask> tasks;
-
-    public PaginationAndListDto(int count, Page<TodoTask> tasks) {
+    private List<TodoTask> tasks;
+    public PaginationAndListDto(int count, List<TodoTask> tasks) {
         this.count = count;
         this.tasks = tasks;
     }
@@ -24,11 +25,11 @@ public class PaginationAndListDto {
         this.count = count;
     }
 
-    public Page<TodoTask> getTasks() {
+    public List<TodoTask> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Page<TodoTask> tasks) {
+    public void setTasks(List<TodoTask> tasks) {
         this.tasks = tasks;
     }
 
@@ -37,6 +38,7 @@ public class PaginationAndListDto {
         return "PaginationAndListDto [count=" + count + ", tasks=" + tasks + "]";
     }
 
+   
     
 
     

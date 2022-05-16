@@ -1,7 +1,5 @@
 package com.demo.todo.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.todo.dto.AddTaskDto;
@@ -28,13 +27,6 @@ public class TodoController {
 	@Autowired
 	private TodoService todoService;
 
-	public String RemoveLastEqual(String str) {
-		if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == '=') {
-			str = str.substring(0, str.length() - 1);
-		}
-		return str;
-	}
-
 	@GetMapping("alltasks/showall/{offset}/{pageSize}")
 	public RestResponse getAllTasks(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize,
 			HttpServletRequest req) {
@@ -45,9 +37,15 @@ public class TodoController {
 
 	@PostMapping("/alltasks")
 	// create task rest Api
-	public RestResponse createTask(@RequestBody AddTaskDto task) {
+	public RestResponse createTask(@RequestBody AddTaskDto task,HttpServletRequest req) {
 		try {
-			return todoService.addUserTask(task);
+			System.out.println(req.getAttribute("id"));
+			long userId = Long.parseLong(req.getAttribute("id").toString());
+			System.out.println("11====");
+			System.out.println(task);
+			System.out.println(userId);
+			System.out.println("11====endddd");
+			return todoService.addUserTask(task,userId);
 		} catch (Exception e) {
 			return new StatusResponse(500, e.getMessage(), null);
 		}
@@ -62,17 +60,18 @@ public class TodoController {
 			return taskRepository.save(task);
 		} else
 			return null;
-		// return ResponseEntity.ok(updateEmployee);
+		
 
 	}
 
 	
-	@PostMapping("alltasks/searchall/{offset}/{pageSize}")
-	public RestResponse textSearchAll(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize,@RequestBody String text,
+	@GetMapping("alltasks/searchall")
+	public RestResponse textSearchAll(@RequestParam(defaultValue = "1",required = false)int pageNumber, @RequestParam(required = false,defaultValue = "4")int pageData, @RequestParam(defaultValue ="",required = false)String textSearch,
 			HttpServletRequest req) {
-				String newStr = RemoveLastEqual(text);
+				System.out.println("textSearch");
+				System.out.println(textSearch);
 		long userId = Long.parseLong(req.getAttribute("id").toString());
-		return todoService.fetchTaskByText(offset, pageSize,newStr,userId);
+		return todoService.fetchTaskByText(pageNumber, pageData,textSearch,userId);
 
 	}
 
