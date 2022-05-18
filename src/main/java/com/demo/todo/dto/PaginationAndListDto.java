@@ -6,7 +6,7 @@ import com.demo.todo.model.TodoTask;
 
 
 public class PaginationAndListDto {
-    private int count;
+    private long count;
     private List<TodoTask> tasks;
     public PaginationAndListDto(int count, List<TodoTask> tasks) {
         this.count = count;
@@ -16,11 +16,11 @@ public class PaginationAndListDto {
     public PaginationAndListDto() {
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(long count) {
         this.count = count;
     }
 

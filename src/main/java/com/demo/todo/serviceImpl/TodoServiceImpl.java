@@ -57,21 +57,22 @@ public class TodoServiceImpl implements TodoService {
         return new StatusResponse(200,"All Data",countAndListData);
     }
 
-    //fetch all tasks by SeachText
+
+    
     public RestResponse fetchTaskByText(int offset,int pageSize,String textSearch1,long userId){
         PaginationAndListDto countAndListData = new PaginationAndListDto();
         Users u = userRepository.findById(userId);
-            List<TodoTask> allTasks = taskRepository.findByTaskrowContainingIgnoreCaseAndUsersOrderByCreatedAtDesc(textSearch1, u,PageRequest.of((offset-1),pageSize));
+          List<TodoTask> allTasks = taskRepository.findByTaskrowContainingIgnoreCaseAndUsersOrderByCreatedAtDesc(textSearch1, u,PageRequest.of((offset-1),pageSize));
+                                                    // findByTaskTitleContainingIgnoreCaseAndUserOrderByCreatedAtDesc
             countAndListData.setTasks(allTasks);  
            long totalRecordCount ;
         if(textSearch1.isEmpty()){
              totalRecordCount = taskRepository.countByUsers(u);
         }else{
-            totalRecordCount = taskRepository.countByTaskrowContainingIgnoreCaseAndUsers(textSearch1,u); 
+            totalRecordCount = taskRepository.countByTaskrowContainingIgnoreCase(textSearch1,u); 
         }
         
-        int i=(int)totalRecordCount; 
-        countAndListData.setCount(i);
+        countAndListData.setCount(totalRecordCount);
 
         return new StatusResponse(200,"All Searched data",countAndListData);
 
