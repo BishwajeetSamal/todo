@@ -176,4 +176,16 @@ public class UserServiceImpl implements UserService {
         return new StatusResponse(400, "Please Enter EmailId !", null);
     }
 
+
+    public RestResponse checkUserNameExist(String userName){
+        if(userName!="" ||userName!=null){
+            Users user = userRepository.findByUserNameIgnoreCase(userName);
+            if(user!=null){
+                return new StatusResponse(409, "Already Exist !", user);
+            }
+            return new StatusResponse(202, "UserName Not Present !", null);
+        }
+        return new StatusResponse(400, "Please Enter UserName !", null);
+    } 
+
 }

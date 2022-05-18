@@ -11,7 +11,9 @@ public interface UserService {
 
     public RestResponse userLogin(LoginDto loginDto) throws HandleUserException;
 
-    public RestResponse checkEmailExist(String emailId);
+    public RestResponse checkEmailExist(String emailId);  
+    
+    public RestResponse checkUserNameExist(String userName); 
     
     
 

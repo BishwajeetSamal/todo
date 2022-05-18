@@ -64,6 +64,11 @@ public class UserController {
             return userService.checkEmailExist(emailId);
     }
 
+    @GetMapping(value="/checkUserName/{userName}")
+    public RestResponse checkUserNameExistOrNot(@PathVariable String userName){
+            return userService.checkUserNameExist(userName);
+    }
+
     //logout code
     @PostMapping(value = "/logout", produces = "application/json")
 	public RestResponse logout(HttpServletRequest req) {
