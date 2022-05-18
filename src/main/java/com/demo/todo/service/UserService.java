@@ -10,6 +10,9 @@ public interface UserService {
     public RestResponse register(RegisterDto registerDto) throws AlreadyExistException;
 
     public RestResponse userLogin(LoginDto loginDto) throws HandleUserException;
+
+    public RestResponse checkEmailExist(String emailId);
+    
     
 
 }

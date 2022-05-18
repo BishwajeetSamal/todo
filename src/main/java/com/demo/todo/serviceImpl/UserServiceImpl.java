@@ -164,4 +164,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    
+    public RestResponse checkEmailExist(String emailId){
+        if(emailId!="" ||emailId!=null){
+            Users user = userRepository.findByEmailIdIgnoreCase(emailId);
+            if(user!=null){
+                return new StatusResponse(409, "Already Exist !", user);
+            }
+            return new StatusResponse(202, "EmailId Not Present !", null);
+        }
+        return new StatusResponse(400, "Please Enter EmailId !", null);
+    }
+
 }

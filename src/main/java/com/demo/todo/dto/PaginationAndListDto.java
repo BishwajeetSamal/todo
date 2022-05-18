@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.demo.todo.model.TodoTask;
 
-import org.springframework.data.domain.Page;
 
 public class PaginationAndListDto {
     private int count;

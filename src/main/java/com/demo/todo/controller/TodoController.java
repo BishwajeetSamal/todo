@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.todo.dto.AddTaskDto;
+import com.demo.todo.dto.UpdateRowDto;
 import com.demo.todo.dto.http.response.RestResponse;
 import com.demo.todo.dto.http.response.StatusResponse;
 import com.demo.todo.model.TodoTask;
@@ -68,11 +69,21 @@ public class TodoController {
 	@GetMapping("alltasks/searchall")
 	public RestResponse textSearchAll(@RequestParam(defaultValue = "1",required = false)int pageNumber, @RequestParam(required = false,defaultValue = "4")int pageData, @RequestParam(defaultValue ="",required = false)String textSearch,
 			HttpServletRequest req) {
-				System.out.println("textSearch");
-				System.out.println(textSearch);
 		long userId = Long.parseLong(req.getAttribute("id").toString());
 		return todoService.fetchTaskByText(pageNumber, pageData,textSearch,userId);
 
 	}
 
+	// update employee rest API
+	@PutMapping("alltasks/updatetask")
+	public RestResponse updateRowTsk(@RequestBody UpdateRowDto updateDto,HttpServletRequest req) {	
+		try {
+			long userId = Long.parseLong(req.getAttribute("id").toString());
+			
+		return todoService.updateTaskRow(updateDto,userId);
+		} catch (Exception e) {
+			return new StatusResponse(500, e.getMessage(), null);
+		}
+
+	}
 }

@@ -3,9 +3,11 @@ package com.demo.todo.serviceImpl;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
 import com.demo.todo.dto.AddTaskDto;
 import com.demo.todo.dto.PaginationAndListDto;
+import com.demo.todo.dto.UpdateRowDto;
 import com.demo.todo.dto.http.response.RestResponse;
 import com.demo.todo.dto.http.response.StatusResponse;
 import com.demo.todo.model.TodoTask;
@@ -13,14 +15,15 @@ import com.demo.todo.model.users.Users;
 import com.demo.todo.repository.TaskRepository;
 import com.demo.todo.repository.UserRepository;
 import com.demo.todo.service.TodoService;
+import com.demo.todo.validator.Validations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TodoServiceImpl implements TodoService {
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     TaskRepository taskRepository;
@@ -61,25 +64,44 @@ public class TodoServiceImpl implements TodoService {
             List<TodoTask> allTasks = taskRepository.findByTaskrowContainingIgnoreCaseAndUsersOrderByCreatedAtDesc(textSearch1, u,PageRequest.of((offset-1),pageSize));
             countAndListData.setTasks(allTasks);  
            long totalRecordCount ;
-           System.out.println("abxc="+textSearch1);
         if(textSearch1.isEmpty()){
-            System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
              totalRecordCount = taskRepository.countByUsers(u);
-             System.out.println(totalRecordCount); 
         }else{
-            System.out.println(textSearch1);
             totalRecordCount = taskRepository.countByTaskrowContainingIgnoreCaseAndUsers(textSearch1,u); 
         }
         
-        int i=(int)totalRecordCount;
-        System.out.println(i);  
+        int i=(int)totalRecordCount; 
         countAndListData.setCount(i);
-        System.out.println(textSearch1);
-        System.out.println("Users==================================");
-        System.out.println(countAndListData);
 
         return new StatusResponse(200,"All Searched data",countAndListData);
 
+    }
+
+    public RestResponse updateTaskRow(UpdateRowDto updateDto,long userId){
+        RestResponse rs = null;
+        // list of required parameter in this registration and can be change
+        String[] requestedArray = { "id","taskrow",
+                "description","userId","deadLine" };
+        Validations validations = new Validations();
+        // validate user with required fields
+        rs = validations.validate(updateDto, requestedArray);
+        if (rs != null) {
+            StatusResponse ds = (StatusResponse) rs;
+            logger.error("Updation of task data validation Error " + ds.getMessage());
+            return new StatusResponse(400, ds.getMessage(), null);
+        }
+            TodoTask updateTodo = new TodoTask();
+            Timestamp timestamp_object = Timestamp.valueOf(updateDto.getUserTime());
+            updateTodo.setDeadLine(timestamp_object.getTime());
+            updateTodo.setDescription(updateDto.getDescription());
+            updateTodo.setTaskrow(updateDto.getTaskrow());
+            updateTodo.setId(updateDto.getId());
+            Users u = userRepository.findById(userId);
+            updateTodo.setUsers(u);
+           TodoTask td= taskRepository.save(updateTodo);
+
+
+        return new StatusResponse(200,"All Searched data",td);
     }
    
 }
