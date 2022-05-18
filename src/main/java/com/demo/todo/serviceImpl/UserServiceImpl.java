@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
         u.setContactNo(registerDto.getContactNo());
         u.setEmailId(registerDto.getEmailId());
         u.setOrganisation(registerDto.getOrganisation());
+        u.setDob(registerDto.getDob());
         String passwordEnc = bCryptPasswordEncoder.encode(registerDto.getUserPassword());
         u.setPassword(passwordEnc);
         userRepository.save(u);
