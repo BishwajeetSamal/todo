@@ -19,6 +19,7 @@ import com.demo.todo.dto.http.response.StatusResponse;
 import com.demo.todo.model.TodoTask;
 import com.demo.todo.repository.TaskRepository;
 import com.demo.todo.service.TodoService;
+import com.demo.todo.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -40,12 +41,7 @@ public class TodoController {
 	// create task rest Api
 	public RestResponse createTask(@RequestBody AddTaskDto task,HttpServletRequest req) {
 		try {
-			System.out.println(req.getAttribute("id"));
 			long userId = Long.parseLong(req.getAttribute("id").toString());
-			System.out.println("11====");
-			System.out.println(task);
-			System.out.println(userId);
-			System.out.println("11====endddd");
 			return todoService.addUserTask(task,userId);
 		} catch (Exception e) {
 			return new StatusResponse(500, e.getMessage(), null);
@@ -54,13 +50,12 @@ public class TodoController {
 
 	// update employee rest API
 	@PutMapping("/alltasks/{id}")
-	public TodoTask updateIsActiveTask(@PathVariable long id) {
-		TodoTask task = taskRepository.findById(id);
-		if (task != null) {
-			task.setActive(true);
-			return taskRepository.save(task);
-		} else
-			return null;
+	public RestResponse updateIsActiveTask(@PathVariable long id) {
+		try {
+			return todoService.checkUncheckTask(id);
+		} catch (Exception e) {
+			return new StatusResponse(500, e.getMessage(), null);
+		}
 		
 
 	}

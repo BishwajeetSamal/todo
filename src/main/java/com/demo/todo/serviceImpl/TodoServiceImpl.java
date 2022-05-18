@@ -105,4 +105,17 @@ public class TodoServiceImpl implements TodoService {
         return new StatusResponse(200,"All Searched data",td);
     }
    
+
+    public RestResponse checkUncheckTask(long id){
+        TodoTask task = taskRepository.findById(id);
+		if (task != null) {
+			task.setActive(!task.isActive());
+			task =  taskRepository.save(task);
+             return new StatusResponse(200,"isActive Changed",task);
+		} else{
+            return new StatusResponse(404,"No data found",null);
+        }
+
+        
+    }
 }

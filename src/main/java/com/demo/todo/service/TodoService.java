@@ -10,6 +10,8 @@ public interface TodoService {
     public RestResponse fetchAllTasks(int offset,int pageSize,long userId);
      public RestResponse fetchTaskByText(int offset,int pageSize,String text,long userId);
      public RestResponse updateTaskRow(UpdateRowDto updateDto,long userId);
+     public RestResponse checkUncheckTask(long id);
+     
    
 
 }
