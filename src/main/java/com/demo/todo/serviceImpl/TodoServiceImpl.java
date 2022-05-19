@@ -79,21 +79,16 @@ public class TodoServiceImpl implements TodoService {
     }
 
     public RestResponse updateTaskRow(UpdateRowDto updateDto,long userId){
-        RestResponse rs = null;
         // list of required parameter in this registration and can be change
-        String[] requestedArray = { "id","taskrow",
-                "description","userId","deadLine" };
-        Validations validations = new Validations();
-        // validate user with required fields
-        rs = validations.validate(updateDto, requestedArray);
-        if (rs != null) {
-            StatusResponse ds = (StatusResponse) rs;
-            logger.error("Updation of task data validation Error " + ds.getMessage());
-            return new StatusResponse(400, ds.getMessage(), null);
-        }
-            TodoTask updateTodo = new TodoTask();
-            Timestamp timestamp_object = Timestamp.valueOf(updateDto.getUserTime());
-            updateTodo.setDeadLine(timestamp_object.getTime());
+            
+             TodoTask updateTodo = new TodoTask();
+             if(updateDto.getUserTime()==null){
+                TodoTask taskObj = taskRepository.findById(updateDto.getId());
+                updateTodo.setDeadLine(taskObj.getDeadLine());    
+             }else{
+                Timestamp timestamp_object = Timestamp.valueOf(updateDto.getUserTime());
+                updateTodo.setDeadLine(timestamp_object.getTime());
+             }
             updateTodo.setDescription(updateDto.getDescription());
             updateTodo.setTaskrow(updateDto.getTaskrow());
             updateTodo.setId(updateDto.getId());
@@ -102,7 +97,7 @@ public class TodoServiceImpl implements TodoService {
            TodoTask td= taskRepository.save(updateTodo);
 
 
-        return new StatusResponse(200,"All Searched data",td);
+        return new StatusResponse(200,"Data updated Successfully",td);
     }
    
 

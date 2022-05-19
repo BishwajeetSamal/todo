@@ -10,22 +10,15 @@ import com.demo.todo.model.users.Users;
 public class UpdateRowDto {
     @NotNull(message = "Id required")
     private long id;
-    @NotNull(message = "Task can't be null")
-    @NotEmpty(message = "Task can't be empty")
     private String taskrow;
-    @NotNull(message = "Description can't be null")
-    @NotEmpty(message = "Description can't empty")
 	private String description;
-    @NotNull(message = "Time is required")
 	private LocalDateTime userTime;
 	private long updateAt = System.currentTimeMillis();
 
 	Users users;
 
-    public UpdateRowDto(@NotNull(message = "Id required") long id,
-            @NotNull(message = "Task can't be null") @NotEmpty(message = "Task can't be empty") String taskrow,
-            @NotNull(message = "Description can't be null") @NotEmpty(message = "Description can't empty") String description,
-            @NotNull(message = "Time is required") LocalDateTime userTime, long updateAt, Users users) {
+    public UpdateRowDto(@NotNull(message = "Id required") long id, String taskrow, String description,
+            LocalDateTime userTime, long updateAt, Users users) {
         this.id = id;
         this.taskrow = taskrow;
         this.description = description;
@@ -91,6 +84,7 @@ public class UpdateRowDto {
                 + updateAt + ", userTime=" + userTime + ", users=" + users + "]";
     }
 
+   
     
     
 }
