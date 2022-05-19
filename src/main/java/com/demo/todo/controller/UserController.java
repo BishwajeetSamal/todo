@@ -60,20 +60,33 @@ public class UserController {
 
     @GetMapping(value="/checkEmail/{emailId}")
     public RestResponse checkEmailExistOrNot(@PathVariable String emailId){
-            return userService.checkEmailExist(emailId);
+          try {
+        	  return userService.checkEmailExist(emailId);
+          }catch (Exception e) {
+              return new StatusResponse(500, e.getMessage(), null);
+          }
     }
 
     @GetMapping(value="/checkUserName/{userName}")
     public RestResponse checkUserNameExistOrNot(@PathVariable String userName){
-            return userService.checkUserNameExist(userName);
+            try {
+            	return userService.checkUserNameExist(userName);
+            }catch (Exception e) {
+                return new StatusResponse(500, e.getMessage(), null);
+            }
     }
 
     //logout code
     @PostMapping(value = "/logout", produces = "application/json")
 	public RestResponse logout(HttpServletRequest req) {
-        Token tokenObj =  tokenRespository.findByUserToken(req.getHeader("Authorization"));
+    	try {
+    		 Token tokenObj =  tokenRespository.findByUserToken(req.getHeader("Authorization"));
              tokenRespository.delete(tokenObj);  
            return new StatusResponse(200,"Logout Successful",null);
+        }catch (Exception e) {
+            return new StatusResponse(500, e.getMessage(), null);
+        }
+       
 	}
 
 }

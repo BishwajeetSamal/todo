@@ -16,25 +16,24 @@ import com.demo.todo.dto.AddTaskDto;
 import com.demo.todo.dto.UpdateRowDto;
 import com.demo.todo.dto.http.response.RestResponse;
 import com.demo.todo.dto.http.response.StatusResponse;
-import com.demo.todo.model.TodoTask;
-import com.demo.todo.repository.TaskRepository;
 import com.demo.todo.service.TodoService;
-import com.demo.todo.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/")
 public class TodoController {
-	@Autowired
-	private TaskRepository taskRepository;
 	@Autowired
 	private TodoService todoService;
 
 	@GetMapping("alltasks/showall/{offset}/{pageSize}")
 	public RestResponse getAllTasks(@PathVariable("offset") int offset, @PathVariable("pageSize") int pageSize,
 			HttpServletRequest req) {
-		long userId = Long.parseLong(req.getAttribute("id").toString());
-		return todoService.fetchAllTasks(offset, pageSize, userId);
-
+				try {
+					long userId = Long.parseLong(req.getAttribute("id").toString());
+					return todoService.fetchAllTasks(offset, pageSize, userId);
+				} catch (Exception e) {
+					return new StatusResponse(500, e.getMessage(), null);
+				}
+		
 	}
 
 	@PostMapping("/alltasks")
@@ -64,9 +63,12 @@ public class TodoController {
 	@GetMapping("alltasks/searchall")
 	public RestResponse textSearchAll(@RequestParam(defaultValue = "1",required = false)int pageNumber, @RequestParam(required = false,defaultValue = "4")int pageData, @RequestParam(defaultValue ="",required = false)String textSearch,
 			HttpServletRequest req) {
-		long userId = Long.parseLong(req.getAttribute("id").toString());
+		try {
+			long userId = Long.parseLong(req.getAttribute("id").toString());
 		return todoService.fetchTaskByText(pageNumber, pageData,textSearch,userId);
-
+		} catch (Exception e) {
+			return new StatusResponse(500, e.getMessage(), null);
+		}
 	}
 
 	// update employee rest API
