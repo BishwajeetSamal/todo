@@ -11,13 +11,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.demo.todo.model.users.Users;
+import com.demo.todo.repository.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
 
 @Component
 public class CORSFilter implements Filter {
-
+  @Autowired
+  UserRepository userRepository;
   /**
    * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
    */
@@ -41,6 +46,12 @@ public class CORSFilter implements Filter {
         String id = Jwts.parser().setSigningKey("SecretKeyToGenJWTs")
             .parseClaimsJws(httpRequest.getHeader("Authorization")).getBody().getSubject();
         req.setAttribute("id", id);
+        long userId = Long.parseLong(id);
+        Users u = userRepository.findById(userId);
+        if(u==null)
+        {
+        throw new IOException("USER NOT FOUND");
+        }
         chain.doFilter(req, res);
       }
     } catch (Exception e) {
